@@ -30,7 +30,7 @@ function App() {
 
     return (
       <>
-        <Route path="/" exact render={Login} />
+        <Route path="/" exact render={props => <Login {...props} />} />
         <Route
           path="/register-page"
           exact

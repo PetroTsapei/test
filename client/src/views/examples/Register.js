@@ -59,7 +59,11 @@ function Register() {
                             <i className="ni ni-hat-3" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Name" type="text" onChange={e => setName(e.target.value)} />
+                        <Input
+                          placeholder="Name"
+                          type="text"
+                          onChange={e => setName(e.target.value)}
+                        />
                       </InputGroup>
                     </FormGroup>
                     <FormGroup>
