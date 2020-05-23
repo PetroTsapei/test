@@ -139,30 +139,7 @@ Argon Design System React
     │       └── DemoNavbar.js
     ├── index.js
     └── views
-        ├── Index.js
-        ├── IndexSections
-        │   ├── Alerts.js
-        │   ├── Buttons.js
-        │   ├── Carousel.js
-        │   ├── CustomControls.js
-        │   ├── Datepicker.js
-        │   ├── Download.js
-        │   ├── Hero.js
-        │   ├── Icons.js
-        │   ├── Inputs.js
-        │   ├── Labels.js
-        │   ├── Login.js
-        │   ├── Menus.js
-        │   ├── Modals.js
-        │   ├── Navbars.js
-        │   ├── Pagination.js
-        │   ├── Pills.js
-        │   ├── Progress.js
-        │   ├── Tabs.js
-        │   ├── TooltipPopover.js
-        │   └── Typography.js
         └── examples
-            ├── Landing.js
             ├── Login.js
             ├── Profile.js
             └── Register.js
