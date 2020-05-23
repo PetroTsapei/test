@@ -1,0 +1,7 @@
+.idea/.gitignore
+.idea/argon-design-system-react-master.iml
+.idea/misc.xml
+.idea/modules.xml
+
+client/node_modules
+.idea
