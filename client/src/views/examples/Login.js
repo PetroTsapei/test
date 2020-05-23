@@ -42,7 +42,6 @@ function Login() {
         email,
         password
       });
-      console.log(rememberUser);
 
       setIsLoading(false);
 
