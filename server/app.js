@@ -19,7 +19,7 @@ app.post('/sign-in', async function (req, res) {
   const user = users.find(e => e.email === email);
 
   if (!user || !await comparePassword(password, user.password)) return res.status(404).json({
-    message: 'Failed to log in'
+    message: 'User not found'
   });
 
   const data = {
