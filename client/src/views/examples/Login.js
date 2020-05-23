@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState, useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import apiClient from '../../utils/apiClient';
 
@@ -16,26 +16,43 @@ import {
   Container,
   Row,
   Col,
-  Alert
+  Alert,
+  Spinner
 } from "reactstrap";
+
+import { UserContext } from '../../contexts/userContext';
 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [rememberUser, setRememberUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const userContext = useContext(UserContext);
 
   const submit = async e => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
+
       const result = await apiClient.post('/sign-in', {
         email,
         password
       });
-      console.log(result);
+      console.log(rememberUser);
+
+      setIsLoading(false);
+
+      userContext.login({
+        ...result.data,
+        rememberUser
+      });
     } catch (error) {
-      setError(error.message);
+      setError(error.response.data.message || error.message);
+      setIsLoading(false);
     }
   };
 
@@ -99,6 +116,7 @@ function Login() {
                         className="custom-control-input"
                         id=" customCheckLogin"
                         type="checkbox"
+                        onChange={e => setRememberUser(e.target.checked)}
                       />
                       <label
                         className="custom-control-label"
@@ -108,13 +126,16 @@ function Login() {
                       </label>
                     </div>
                     <div className="text-center">
-                      <Button
-                        tag="input"
-                        className="my-4"
-                        color="primary"
-                        type="submit"
-                        value="Sign in"
-                      />
+                      {
+                        isLoading ? <Spinner size="md" color="primary" /> :
+                          <Button
+                            tag="input"
+                            className="my-4"
+                            color="primary"
+                            type="submit"
+                            value="Sign in"
+                          />
+                      }
                     </div>
                   </Form>
                 </CardBody>

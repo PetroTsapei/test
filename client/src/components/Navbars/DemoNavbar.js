@@ -1,22 +1,5 @@
-/*!
-
-=========================================================
-* Argon Design System React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
@@ -34,7 +17,11 @@ import {
   Col,
 } from "reactstrap";
 
+import { UserContext } from '../../contexts/userContext';
+
 class DemoNavbar extends React.Component {
+  static contextType = UserContext;
+
   componentDidMount() {
     let headroom = new Headroom(document.getElementById("navbar-main"));
     // initialise
@@ -57,8 +44,8 @@ class DemoNavbar extends React.Component {
     });
   };
 
-  onSignOut = () => {
-    this.props.history.replace('/')
+  onLogout = () => {
+    this.context.logout();
   };
 
   render() {
@@ -110,7 +97,7 @@ class DemoNavbar extends React.Component {
                     <Button
                       className="btn-neutral btn-icon"
                       color="default"
-                      onClick={this.onSignOut}
+                      onClick={this.onLogout}
                     >
                       <span className="btn-inner--icon">
                         <i className="fa fa-sign-out mr-2" />
@@ -130,4 +117,4 @@ class DemoNavbar extends React.Component {
   }
 }
 
-export default withRouter(DemoNavbar);
+export default DemoNavbar;

@@ -14,23 +14,29 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/sign-in', async function (req, res) {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = users.find(e => e.email === email);
+    const user = users.find(e => e.email === email);
 
-  if (!user || !await comparePassword(password, user.password)) return res.status(404).json({
-    message: 'User not found'
-  });
+    if (!user || !await comparePassword(password, user.password)) return res.status(404).json({
+      message: 'User not found'
+    });
 
-  const data = {
-    email: user.email,
-    username: user.username
-  };
+    const data = {
+      email: user.email,
+      username: user.username
+    };
 
-  res.send({
-    ...data,
-    token: generateToken(data)
-  });
+    res.send({
+      ...data,
+      token: generateToken(data)
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
 });
 
 app.post('/sign-up', async function (req, res) {
@@ -55,7 +61,9 @@ app.post('/sign-up', async function (req, res) {
       token: generateToken(data)
     });
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({
+      message: error.message
+    })
   }
 })
 

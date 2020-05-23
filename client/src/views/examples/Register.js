@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import apiClient from '../../utils/apiClient';
 
 // reactstrap components
 import {
@@ -14,20 +15,44 @@ import {
   InputGroup,
   Container,
   Row,
-  Col
+  Col,
+  Alert,
+  Spinner
 } from "reactstrap";
+
+import { UserContext } from '../../contexts/userContext';
 
 
 function Register() {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onRegister = e => {
+  const userContext = useContext(UserContext);
+
+  const submit = async e => {
     e.preventDefault();
 
-    console.log(name, email, password);
+    try {
+      setIsLoading(true);
+
+      const result = await apiClient.post('/sign-up', {
+        username,
+        email,
+        password
+      });
+
+      userContext.login({
+        ...result.data,
+        rememberUser: true
+      });
+    } catch (error) {
+      setError(error.response.data.message || error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -46,12 +71,13 @@ function Register() {
         <Container>
           <Row className="justify-content-center">
             <Col lg="5">
+              { error && <Alert color="danger" children={error} /> }
               <Card className="bg-secondary shadow border-0">
                 <CardBody className="px-lg-5 py-lg-5">
                   <div className="text-center text-muted mb-4">
                     <small>Sign up with credentials</small>
                   </div>
-                  <Form role="form">
+                  <Form role="form" onSubmit={submit}>
                     <FormGroup>
                       <InputGroup className="input-group-alternative mb-3">
                         <InputGroupAddon addonType="prepend">
@@ -60,9 +86,11 @@ function Register() {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
+                          required
                           placeholder="Name"
                           type="text"
-                          onChange={e => setName(e.target.value)}
+                          value={username}
+                          onChange={e => setUsername(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -73,7 +101,14 @@ function Register() {
                             <i className="ni ni-email-83" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Email" type="email" onChange={e => setEmail(e.target.value)} />
+                        <Input
+                          required
+                          placeholder="Email"
+                          type="email"
+                          name="email"
+                          value={email}
+                          onChange={e => setEmail(e.target.value)}
+                        />
                       </InputGroup>
                     </FormGroup>
                     <FormGroup>
@@ -84,22 +119,26 @@ function Register() {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
+                          required
                           placeholder="Password"
                           type="password"
+                          value={password}
                           autoComplete="off"
                           onChange={e => setPassword(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
                     <div className="text-center">
-                      <Button
-                        className="mt-4"
-                        color="primary"
-                        type="button"
-                        onClick={onRegister}
-                      >
-                        Create account
-                      </Button>
+                      {
+                        isLoading ? <Spinner size="md" color="primary" /> :
+                          <Button
+                            tag="input"
+                            className="mt-4"
+                            color="primary"
+                            type="submit"
+                            value="Create account"
+                          />
+                      }
                     </div>
                   </Form>
                 </CardBody>
